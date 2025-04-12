@@ -1,0 +1,54 @@
+health_platform/
+├── core/                         # Módulo central de configuración
+│   ├── settings/                 # Configuración por entorno (dev, prod)
+│   ├── utils/                   
+│   │   ├── data_processing.py    # Funciones estadísticas avanzadas (Python)
+│   │   ├── randomization.py      # Lógica de randomización controlada
+│   │   └── security.py           # Encriptación/Hashing sensible
+├── compliance/                   # Gestión de consentimiento y privacidad
+│   ├── models.py                 
+│   │   └── Consentimiento(models.Model):
+│   │       ├── usuario (FK)
+│   │       ├── version
+│   │       ├── fecha_aceptacion
+│   │       └── revocado (Boolean)
+│   ├── services.py               # Lógica revocación/actualización
+│   └── api/                      # Endpoints para gestión de consentimiento
+├── medical_data/                 # Núcleo médico-estadístico
+│   ├── models.py                 
+│   │   └── EstudioMedico(models.Model):
+│   │       ├── tipo_estudio (choices: GLUCOSA, TSH...)
+│   │       ├── valores (JSON)    # Almacenamiento flexible de resultados
+│   │       └── metadata (FK a RecommendationProfile)
+│   ├── algorithms/               
+│   │   ├── diagnosticos.py       # Clasificación diagnóstica (ej: diabetes)
+│   │   └── metricas.py           # Cálculo IMC, riesgo cardiovascular, etc.
+│   └── services.py               # Servicios para análisis de datos
+├── recommendations/              # Sistema de recomendación
+│   ├── models.py                 
+│   │   └── RecommendationProfile(models.Model):
+│   │       ├── perfil (Deportivo, Estética...)
+│   │       └── estudios_recomendados (JSON) 
+│   ├── rules/                    # Reglas basadas en guías médicas
+│   │   ├── perdida_peso.py       # Ej: Si IMC >30 → agregar estudio X
+│   │   └── deportivo.py          # Lógica específica por perfil
+│   └── engine.py                 # Motor de recomendaciones unificado
+├── users/                        # Gestión de usuarios y permisos
+│   ├── models.py                 
+│   │   └── UsuarioPersonalizado(AbstractUser):
+│   │       ├── tipo (Paciente, Nutriólogo, Médico)
+│   │       └── restricciones_acceso (JSON)
+│   └── auth.py                   # JWT + OAuth2 personalizado
+├── integrations/                 # Conectores externos
+│   ├── labs/                     # Integración con laboratorios
+│   │   ├── parsers/              # Procesamiento de PDF/Excel (OCR opcional)
+│   │   └── api_connectors.py     # Requests a APIs de laboratorios
+│   └── biometria/                # Futura integración con wearables
+├── async_tasks/                  # Tareas asíncronas para escalabilidad
+│   ├── celery.py                 
+│   └── tasks.py                  # Ej: Procesamiento batch de estudios
+└── api/                          # Capa de exposición (REST)
+    ├── v1/                       # Versionado desde el inicio
+    │   ├── medical/              # Endpoints para estudios médicos
+    │   └── recommendations/      # Endpoints del sistema de recomendación
+    └── schema.py                 # OpenAPI/Swagger para documentación
